@@ -64,7 +64,7 @@ public class MyMain {
     System.out.println("Point 3 (random): " + point3);
     
     Position3D origin = new Position3D(0, 0, 0);
-    double distance = Position3D.distanceTo(origin, point3);
+    double distance = Position3D.distanceTo(Position3D.ORIGIN, point3);
     System.out.printf("Distance from point3 to origin: %.2f%n", distance);
     
     Position3D point4 = point2.clone();
