@@ -8,6 +8,13 @@
             "type": "java",
             "name": "TheBagExample",
             "request": "launch",
+            "mainClass": "ArrayBag2.TheBagExample",
+            "projectName": "InClassDataStructures_b538bf84"
+        },
+        {
+            "type": "java",
+            "name": "TheBagExample",
+            "request": "launch",
             "mainClass": "TheBagExample",
             "projectName": "InClassDataStructures_b538bf84"
         },

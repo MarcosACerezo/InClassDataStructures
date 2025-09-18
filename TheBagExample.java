@@ -1,27 +1,36 @@
-import javax.swing.text.Position;
-
 public class TheBagExample {
     public static void main(String[] args) {
         Position3DArrayBag myBag = new Position3DArrayBag();
         System.out.println("Current Capacity: " + myBag.getCapacity());
-
-        myBag.add(new Position3D(0,0,0));
-        myBag.add(new Position3D(200,4892,2018329199));
         myBag.add(new Position3D());
-        
+        myBag.add(new Position3D());
+        myBag.add(new Position3D());
         System.out.println("Current Capacity: " + myBag.getCapacity());
         myBag.trimToSize();
         System.out.println("Current Capacity: " + myBag.getCapacity());
-        Position3DArrayBag cloneBag = new Position3DArrayBag(myBag);
-        System.out.println(myBag == cloneBag);
 
+        Position3DArrayBag cloneBag = new Position3DArrayBag(myBag);
+        System.out.println("cloneBag size: " + cloneBag.size());
+        System.out.println("myBag size: " + myBag.size());
+        for(int i=0; i<cloneBag.size(); i++){
+            System.out.println("CLONE Points share same address: " + (cloneBag.get(i) == myBag.get(i)));
+            System.out.println("CLONE Points share same values: " + (cloneBag.get(i).equals(myBag.get(i))));
+        }
         Position3DArrayBag unionBag = Position3DArrayBag.union(myBag, cloneBag);
 
         System.out.println(myBag.size());
         System.out.println(cloneBag.size());
         System.out.println(unionBag.size());
-        System.out.println(unionBag.getBag());
-    } 
+        for(int i=0; i<myBag.size(); i++){
+            System.out.println("\nUNION Points share same address: " + (myBag.get(i) == unionBag.get(i)));
+            System.out.println("UNION Points share same values: " + (myBag.get(i).equals(unionBag.get(i))));
+        }
+        for(int i=myBag.size(); i<unionBag.size(); i++){
+            System.out.println("\nUNION Points share same address: " + (cloneBag.get(i - 3) == unionBag.get(i)));
+            System.out.println("UNION Points share same values: " + (cloneBag.get(i - 3).equals(unionBag.get(i))));
+        }
+
+    }
 }
 class IntArrayBag {
     private int[ ] data;
@@ -58,22 +67,21 @@ class IntArrayBag {
         }
     }
 }
-
-class Position3DArrayBag implements Cloneable {
+class Position3DArrayBag {
     private Position3D[] data;
     private int manyItems;
-
     public Position3DArrayBag( ) {
         final int INITIAL_CAPACITY = 2;
         manyItems = 0;
         data = new Position3D[INITIAL_CAPACITY];
     }
-
-    public Position3DArrayBag(Position3DArrayBag array){
-        manyItems = array.size();
-        data = array.data.clone();
+    public Position3DArrayBag(Position3DArrayBag other){
+        data = new Position3D[other.getCapacity()];
+        for(int i=0; i<other.manyItems;i++){
+            data[i] = other.data[i].clone();
+        }
+        manyItems = other.manyItems;
     }
-
     public void add(Position3D element) {
         if (manyItems == data.length)
             ensureCapacity((manyItems + 1)*2);
@@ -92,7 +100,6 @@ class Position3DArrayBag implements Cloneable {
     public int getCapacity( ) {
         return data.length;
     }
-
     public int size(){
         return manyItems;
     }
@@ -105,39 +112,32 @@ class Position3DArrayBag implements Cloneable {
         }
     }
 
-    public Position3D[] getBag(){
-        return this.data;
+    public Position3D get(int index){
+        return data[index];
     }
 
     public static Position3DArrayBag union(Position3DArrayBag bag1, Position3DArrayBag bag2){
         Position3DArrayBag unionBag = new Position3DArrayBag();
-        unionBag.data = new Position3D[bag1.manyItems + bag2.manyItems];
-        System.arraycopy(bag1.data, 0, unionBag.data, 0, bag1.manyItems);
-        System.arraycopy(bag2.data, 0, unionBag.data, bag1.manyItems, bag2.manyItems);
+        unionBag.data = new Position3D[bag1.size() + bag2.size()];
+        for(int i=0; i<bag1.size(); i++){
+            unionBag.data[i] = bag1.data[i].clone();
+        }
+        int bag1Size = bag1.size();
+        for(int i=0; i<bag2.size(); i++){
+            unionBag.data[i + bag1Size ] = bag2.data[i].clone();
+        }
         unionBag.manyItems = bag1.size() + bag2.size();
-        return new Position3DArrayBag(unionBag);
+        return unionBag;
+
     }
-    
-    // static Position3dArrayBag union(Position3DArrayBag bag1, Position3DArrayBag bag2){
-    //     Position3D[] bag = new Position3D[bag1.size()+bag2.size()];
-    //     Position3D[] hold = bag1.getBag();
-    //     int count = 0;
-    //     for(int i=0; i<hold.length; i++){
-    //         if(hold[i]!=null){
-    //             bag[count]=hold[i];
-    //             count++;
-    //         }
-    //     }
-    //     hold = bag2.getBag();
-    //     for(int i=0; i<hold.length; i++){
-    //         if(hold[i]!=null){
-    //             bag[count]=hold[i];
-    //             count++;
-    //         }
-    //     }
-    //     return new Position3DArrayBag(bag);
-    // }
-
-
 }
- 
+/**
+ * runtime analysis
+ * 
+ * add - Best case: O(1)    Worst case: O(n)
+ * size Worst case: O(1)
+ * union - O(n)
+ * new constructor - O(n)
+ */
+
+//2,6,3,3,4,8,7
