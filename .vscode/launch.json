@@ -6,6 +6,34 @@
     "configurations": [
         {
             "type": "java",
+            "name": "PhoneDirectory",
+            "request": "launch",
+            "mainClass": "PhoneDirectory",
+            "projectName": "InClassDataStructures_b538bf84"
+        },
+        {
+            "type": "java",
+            "name": "SearchExample",
+            "request": "launch",
+            "mainClass": "SearchingBag.SearchExample",
+            "projectName": "InClassDataStructures_b538bf84"
+        },
+        {
+            "type": "java",
+            "name": "SearchExample",
+            "request": "launch",
+            "mainClass": "SearchExample",
+            "projectName": "InClassDataStructures_b538bf84"
+        },
+        {
+            "type": "java",
+            "name": "SearchExample",
+            "request": "launch",
+            "mainClass": "ArrayBag2.SearchExample",
+            "projectName": "InClassDataStructures_b538bf84"
+        },
+        {
+            "type": "java",
             "name": "TheBagExample",
             "request": "launch",
             "mainClass": "ArrayBag2.TheBagExample",
