@@ -3,7 +3,7 @@ package ArrayBag2;
 public class TheBagExample {
     public static void main(String[] args) {
 
-        ArrayBag<Position3D> myBag = new ArrayBag();
+        ArrayBag<Position3D> myBag = new ArrayBag<>();
         System.out.println("Current Capacity: " + myBag.getCapacity());
 
         myBag.add(new Position3D(10,10,10));
@@ -15,7 +15,7 @@ public class TheBagExample {
         System.out.println("Current Capacity: " + myBag.getCapacity());
         System.out.println("Current size: " + myBag.size());
 
-        ArrayBag<Position3D> copiedBag = new ArrayBag(myBag);
+        ArrayBag<Position3D> copiedBag = new ArrayBag<>(myBag);
         copiedBag.add(new Position3D(40,40,40));
         System.out.println("Copied bag Size: " + copiedBag.size());
         System.out.println("Copied Bag Capacity: " + copiedBag.getCapacity());
@@ -40,9 +40,18 @@ class ArrayBag<E> {
     public ArrayBag(ArrayBag<E> other) {
         this.manyItems = other.manyItems;
         // this.data = new Object[other.data.length];
-        this.data=other.getData();
+        this.data=other.new Object [other.data.length];
         // for (int i = 0; i < other.manyItems; i++)
         //     this.data[i] = other.getData();//object constructor
+    for ( int i = 0; i < other.manyItems; i++){
+            try{
+                this.data[i] = other.data[i].getClass().getMethod("clone").invoke(other.data[i]); 
+            }
+            catch (Exception e){
+                throw new RuntimeException("Clone Failed", e);
+            }
+        }
+    
     }
     public Object[] getData(){
         return this.data;
@@ -87,19 +96,18 @@ class ArrayBag<E> {
         }
 
     }
-    
-    public static <E> ArrayBag<E> union(ArrayBag<E> bag1, ArrayBag<E>bag2) {
+    @SuppressWarnings("unchecked")
+    public static <E extends Cloneable> ArrayBag<E> union(ArrayBag<E> bag1, ArrayBag<E>bag2) {
         ArrayBag<E> result = new ArrayBag<E>();
         result.ensureCapacity(bag1.manyItems + bag2.manyItems);
         
         try{
         
             for (int i = 0; i < bag1.manyItems; i++)
-                result.add((E)bag1.data[i]);//don't need to declare clone?
+                result.add((E)bag1.data[i].getClass().getMethod("clone").invoke(bag1.data[i]));//don't need to declare clone?
             
             for (int i = 0; i < bag2.manyItems; i++)
-                result.add((E)bag2.data[i]);
-
+               result.add((E)bag2.data[i].getClass().getMethod("clone").invoke(bag2.data[i]));
         }
 
         catch (Exception e){
@@ -121,7 +129,7 @@ class ArrayBag<E> {
         i = (int) (Math.random() * manyItems);
         return (E) data[i];
     }
-    
+    @SuppressWarnings("unchecked")
     public static <E> void addAll(ArrayBag<E> bag1, ArrayBag<E>bag2){
         Object[] hold = bag2.getData();
         for(int i=0; i<bag2.size();i++){
