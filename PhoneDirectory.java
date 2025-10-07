@@ -22,6 +22,7 @@ public class PhoneDirectory{
         }
 
         System.out.printf("Size before removal: %s", directory.size());
+        System.out.println(directory);
         //Cannot search for the extension because the table is not designed in that manner
         directory.remove("Claire");
         System.out.printf("Size after removal: %s", directory.size());
