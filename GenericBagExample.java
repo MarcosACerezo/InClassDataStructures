@@ -1,41 +1,39 @@
-import javax.swing.text.Position;
+class Node<E> {
+    private E data;
+    private Node<E> link;
 
-class LinkedNode<E> {
-    private Object data;
-    private LinkedNode<E> link;
-
-    public LinkedNode(Object initialData, LinkedNode<E> initialLink) {
+    public Node(E initialData, Node<E> initialLink) {
         data = initialData;
         link = initialLink;
     }
 
-    public void setData(Object newData) {
+    public void setData(E newData) {
         data = newData;
     }
 
     public E getData() {
-        return (E) data;
+        return data;
     }
 
-    public LinkedNode<E> getLink() {
+    public Node<E> getLink() {
         return link;
     }
 
-    public void setLink(LinkedNode<E> newLink) {
+    public void setLink(Node<E> newLink) {
         link = newLink;
     }
 
-    public static LinkedNode listSearch(LinkedNode head, Object target) {
+    public static <E> Node<E> listSearch(Node<E> head, E target) {
 
-        LinkedNode cursor;
+        Node<E> cursor;
         for (cursor = head; cursor != null; cursor = cursor.link)
             if (cursor.data.equals(target))
                 return cursor;
         return null;
     }
 
-    public static LinkedNode listPosition(LinkedNode head, int position) {
-        LinkedNode cursor;
+    public static <E> Node<E> listPosition(Node<E> head, int position) {
+        Node<E> cursor;
         int i;
 
         if (position <= 0)
@@ -49,77 +47,80 @@ class LinkedNode<E> {
 }
 
 class LinkedBag<E> implements Cloneable {
-    private LinkedNode<E> head;
-    private int manyLinkedNodes;
+    private Node<E> head;
+    private int manyNodes;
 
     public LinkedBag(){
         head = null;
-        manyLinkedNodes = 0;
+        manyNodes = 0;
     }
 
     public void add(E element) {
-        head = new LinkedNode(element, head);
-        manyLinkedNodes++;
+        head = new Node<E>(element, head);
+        manyNodes++;
     }
 
+    
     public int countOccurrences(E target) {
         int answer = 0;
-        LinkedNode<E> cursor = LinkedNode.listSearch(head, target);
+        Node<E> cursor = Node.listSearch(head, target);
 
         while (cursor != null) {
             answer++;
             // Move the cursor to the next occurrence of the target
             cursor = cursor.getLink();
-            cursor = LinkedNode.listSearch(cursor, target);
+            cursor = Node.listSearch(cursor, target);
         }
 
         return answer;
     }
 
-    public LinkedNode getHead(){
+    public Node<E> getHead(){
         return head;
     }
 
-    public boolean remove( E target) {
-        LinkedNode targetLinkedNode = LinkedNode.listSearch(head, target);
+    
+    public boolean remove(E target) {
+        Node<E> targetNode = Node.listSearch(head, target);
 
-        if (targetLinkedNode == null)
+        if (targetNode == null)
             return false;
         else {
-            targetLinkedNode.setData(head.getData());
+            targetNode.setData(head.getData());
             head = head.getLink();
-            manyLinkedNodes--;
+            manyNodes--;
             return true;
         }
     }
 
     public int size() {
-        return manyLinkedNodes;
+        return manyNodes;
     }
     
     //the run time would be O(n) worst case because of the listPosition method
-    @SuppressWarnings("unchecked")
+    
     public E grab(){
-        LinkedNode rand = LinkedNode.listPosition(head, (int)(manyLinkedNodes * Math.random() + 1));
-        return (E)rand.getData();
+        if(manyNodes == 0){
+            throw new IllegalStateException("There are no elements in the bag");
+        }
+        Node<E> rand = Node.listPosition(head, (int)(manyNodes * Math.random() + 1));//select node
+        return rand.getData();//return data from node
     }
 
     //O(n) runtime
     @SuppressWarnings("unchecked")
     public static <E extends Cloneable> LinkedBag<E> union(LinkedBag<E> bag1, LinkedBag<E> bag2) {
         LinkedBag<E> result = new LinkedBag<E>();
-        LinkedNode<E> cursor = bag1.head;
+        Node<E> cursor;
         try{
-            while(cursor != null){
+            for(cursor=bag1.head; cursor != null; cursor = cursor.getLink()){
             result.add((E)cursor.getData().getClass().getMethod("clone").invoke(cursor.getData()));
-            cursor = cursor.getLink();
             }
             cursor = bag2.head;
-            while(cursor != null){
+            for(cursor=bag2.head; cursor != null; cursor = cursor.getLink()){
                 result.add((E)cursor.getData().getClass().getMethod("clone").invoke(cursor.getData()));
-                cursor = cursor.getLink();
             }
-            result.manyLinkedNodes = bag1.manyLinkedNodes + bag2.manyLinkedNodes;
+            result.manyNodes = bag1.manyNodes + bag2.manyNodes;
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -134,7 +135,7 @@ class LinkedBag<E> implements Cloneable {
 
 public class GenericBagExample {
     public static void main(String[] args) {
-        LinkedBag<Position3D> positionBag = new LinkedBag();
+        LinkedBag<Position3D> positionBag = new LinkedBag<>();
         System.out.println("Current size: " + positionBag.size());
 
         //filling bag
@@ -162,7 +163,7 @@ public class GenericBagExample {
             System.out.println(positionBag.grab());
         }
 
-        LinkedBag<Position3D> secondBag = new LinkedBag();
+        LinkedBag<Position3D> secondBag = new LinkedBag<>();
         secondBag.add(new Position3D(8, 00, 8135));
         secondBag.add(new Position3D(1, 2, 3));
         secondBag.add(new Position3D(1, 2, 3));
@@ -171,7 +172,7 @@ public class GenericBagExample {
 
         LinkedBag<Position3D> unionBag = LinkedBag.union(secondBag, positionBag);
         System.out.println(unionBag.size());
-        LinkedNode<Position3D> cursor = unionBag.getHead();
+        Node<Position3D> cursor = unionBag.getHead();
         System.out.println("\n\n Union Bag Information\n");
         while(cursor != null){
             System.out.println(cursor.getData());
