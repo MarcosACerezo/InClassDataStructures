@@ -29,9 +29,7 @@ public class StackExample {
         String case5 = "{[()(){}([])]({[]})}";
 
         String case6 = "{[()({[)]({})](])}";
-        String case7 = "}}}";
 
-        System.out.println(ArrayStack.isBalanced(case7));
         System.out.println(ArrayStack.isBalanced(case1));
         System.out.println(ArrayStack.isBalanced(case2));
         System.out.println(ArrayStack.isBalanced(case3));
