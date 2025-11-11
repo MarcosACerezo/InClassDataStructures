@@ -6,6 +6,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "QueueExample",
+            "request": "launch",
+            "mainClass": "QueueExample",
+            "projectName": "InClassDataStructures_b538bf84"
+        },
+        {
+            "type": "java",
+            "name": "StackExample2",
+            "request": "launch",
+            "mainClass": "StackExample2",
+            "projectName": "InClassDataStructures_b538bf84"
+        },
+        {
+            "type": "java",
             "name": "StackExample",
             "request": "launch",
             "mainClass": "StackExample",
