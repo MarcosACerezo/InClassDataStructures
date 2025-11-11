@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "LinkedQueueExample",
+            "request": "launch",
+            "mainClass": "LinkedQueueExample",
+            "projectName": "InClassDataStructures_b538bf84"
+        },
+        {
+            "type": "java",
             "name": "QueueExample",
             "request": "launch",
             "mainClass": "QueueExample",
