@@ -1,4 +1,4 @@
-class Node<E> {
+class Position3DNode<E> {
     private Position3D data;
     private Position3DNode link;
 

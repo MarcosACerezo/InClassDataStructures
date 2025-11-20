@@ -6,6 +6,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "TreeExample",
+            "request": "launch",
+            "mainClass": "TreeExample",
+            "projectName": "InClassDataStructures_b538bf84"
+        },
+        {
+            "type": "java",
+            "name": "BTNodeExample",
+            "request": "launch",
+            "mainClass": "BTNodeExample",
+            "projectName": "InClassDataStructures_b538bf84"
+        },
+        {
+            "type": "java",
             "name": "LinkedQueueExample",
             "request": "launch",
             "mainClass": "LinkedQueueExample",
